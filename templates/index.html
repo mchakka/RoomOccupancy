@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.css" />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.js"></script>
+<script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous">
+    </script>
+<head>
+  <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Abel|Varela+Round" rel="stylesheet">
+  <title>Demo Application</title>
+
+  <meta charset="UTF-8">
+</head>
+<body>
+ <h1>Sensor Data for Room 1</h1>
+  <p></p>
+  
+  
+  <!-- <input id = "Temperature", name="he" />-->
+  
+  
+  <div id="bodyContainer">
+    <form name = sendInputs action = "/api" method = "POST">
+      <div class="col-md-2">
+        <p2>Temperature:</p2>
+        <input class ="inputs" id = "Temperature" name="temp" value ="{{temp}}"/> 
+      
+        <p2>Humidity:</p2>
+        <input class ="inputs" id="Humidity" name="temp2" value ="{{temp2}}" /> 
+        
+        <p2>Light:</p2>
+        <input class ="inputs" id="Light" name="temp3" value ="{{temp3}}" /> 
+        
+        <p2>CO2:</p2>
+        <input class ="inputs" id="CO2" name="temp4" value ="{{temp4}}" /> 
+
+        <p2>HumidityRatio:</p2>
+        <input class ="inputs" id="HumidityRatio" name="temp5" value ="{{temp5}}" /> 
+        
+        <p2>Prediction:</p2>
+        <input class ="inputs predict" id="Prediction" name="output" value ="{{output}}" />
+      </div>
+      
+      <div id="bodyContainer">
+        <p3> Status:</p3>
+        <input class ="status" id="Status" name="status" value="{{status}}" />
+        <input type="hidden" id="Inputs" name="temp6" value="{{temp6}}" />
+          
+        <button type="button" value="false" id="regularButton" onclick="change()"> 
+          Is the Prediction Correct? 
+        </button>
+      </div>
+      <br>
+      <p4> If the prediction is correct, the data will be added back to HBase/HDFS and will be used when the model is retrained</p4>
+    </form>
+  
+  
+  <script>
+    setInterval(function() {
+      listOfTemps = [19.0, 19.5, 20.0, 20.5, 21.0, 21.5, 22.0, 22.5, 23.0, 23.5]
+      ind = Math.floor(Math.random()*listOfTemps.length)
+      ind = parseFloat((Math.random()* (listOfTemps[listOfTemps.length-1] - listOfTemps[0]) + listOfTemps[0]).toFixed(1))
+      
+      // $("#Temperature").val((listOfTemps[ind]).toFixed(1));
+      $("#Temperature").val(ind);
+      
+      listOfHums = [16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40]
+      //ind2 = Math.floor(Math.random()*listOfHums.length)
+      ind2 = Math.floor(Math.random()* (listOfHums[listOfHums.length-1] - listOfHums[0]) + listOfHums[0])
+      
+      //$("#Humidity").val((listOfHums[ind2]));
+      $("#Humidity").val(ind2);
+      
+      listOfLigh = [0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500]
+      ind3 = Math.floor(Math.random()*listOfLigh.length)
+      ind3 = Math.floor(Math.random()* (listOfLigh[listOfLigh.length-1] - listOfLigh[0]) + listOfLigh[0])
+      
+      //$("#Light").val((listOfLigh[ind3]));
+      $("#Light").val(ind3);
+      
+      listOfCO2 = [0, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000]
+      //ind4 = Math.floor(Math.random()*listOfCO2.length)
+      ind4 = Math.floor(Math.random()* (listOfCO2[listOfCO2.length-1] - listOfCO2[0]) + listOfCO2[0])
+
+      //$("#CO2").val((listOfCO2[ind4]));
+      $("#CO2").val(ind4);
+      
+      listOfRats = [.002, .0025, .003, .0035, .004, .0045, .005, .0055, .006, .0065]
+      //ind5 = Math.floor(Math.random()*listOfRats.length)
+      ind5 = parseFloat((Math.random()* (listOfRats[listOfRats.length-1] - listOfRats[0]) + listOfRats[0]).toFixed(4))
+      
+      //$("#HumidityRatio").val((listOfRats[ind5]));
+      $("#HumidityRatio").val(ind5);
+
+      
+      $("#Inputs").val(document.getElementById('Temperature').value.toString() + ',' + 
+                       document.getElementById('Humidity').value.toString()  + ',' +
+                       document.getElementById('Light').value.toString()  + ',' +
+                       document.getElementById('CO2').value.toString()  + ',' +
+                       document.getElementById('HumidityRatio').value.toString());
+      
+      $("#Status").val("Not Added");
+      
+      document.sendInputs.submit();
+    }, 5000);
+    
+    function change() {
+      var change = document.getElementById("regularButton");
+      
+      if (change.value == "false") {
+        document.sendInputs.elements["status"].value = "Added";
+        document.sendInputs.submit();
+      } else {
+        change.value = "true";
+      }
+      
+    }
+  </script>
+ </body>
+
+</html>
