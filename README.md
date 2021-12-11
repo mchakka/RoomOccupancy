@@ -1,6 +1,6 @@
-# PySpark-HBase
+# Predicting Room Occupancy
 
-## What Is This Repo?
+## What Is This Repository?
 
 This project consists of example code of how to perform operations (put, get, scan) in PySpark on HBase Tables.
 Examples are in the `code-examples` folder of this repository
